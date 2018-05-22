@@ -21,7 +21,7 @@ int initMotor()
     set_PWM_dutycycle(pi, EN2, 0);
 }
 
-void go_forward()
+void move_go()
 {
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
@@ -32,7 +32,7 @@ void go_forward()
     gpio_write(pi, EN2, PI_HIGH);
 }
 
-void go_backward()
+void move_back()
 {
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_HIGH);
@@ -43,7 +43,7 @@ void go_backward()
     gpio_write(pi, EN2, PI_HIGH);
 }
 
-void go_right()
+void move_right()
 {
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_LOW);
@@ -54,7 +54,7 @@ void go_right()
     gpio_write(pi, EN2, PI_HIGH);
 }
 
-void go_left()
+void move_left()
 {
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
