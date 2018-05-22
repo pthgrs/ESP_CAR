@@ -20,10 +20,10 @@ int pi;
 
 /* direction */
 int initMotor();  
-void go_forward();
-void go_backward();
-void go_right();
-void go_left();
+void move_forward();
+void move_backward();
+void move_right();
+void move_left();
 void stop();
 void controlSpeed(int sp);
 
