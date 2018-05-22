@@ -1,8 +1,8 @@
 #include "project.h"
 
-#define ADDRESS     "192.168.219.115"
+#define ADDRESS     "192.168.219.115:1883"
 #define CLIENTID    "esp"
-#define TOPIC       "direction"
+#define TOPIC       "#"
 #define QOS         1
 
 
@@ -17,7 +17,7 @@ void createMQTTClient()
     MQTTClient_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
 
     MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
-
+    
     // connect the client to the daemon
     if((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS){
         printf("Failed to connect, return code %d\n", rc);
@@ -50,21 +50,32 @@ int msgarrvd(void *context, char *topicName
     int i;
     char* msg;
 
-    printf("     topic: %s\n", topicName);
-    printf("   message: ");
+    printf("%s\t", topicName);
+    printf("%s\n", (char *)message->payload);
 
     msg = message->payload;
 
-    if(strcmp(msg, "forward") == 0)
-        go_forward();
-    else if(strcmp(msg, "backward") == 0)
-        go_backward();
-    else if(strcmp(msg, "right") == 0)
-        go_right();
-    else if(strcmp(msg, "left") == 0)
-        go_left();
-    else if(strcmp(msg, "stop") == 0)
-        stop();
+    if(strcmp(topicName, "direction") == 0){
+
+        if(strcmp(msg, "go") == 0)
+            move_go();
+        else if(strcmp(msg, "back") == 0)
+            move_back();
+        else if(strcmp(msg, "right") == 0)
+            move_right();
+        else if(strcmp(msg, "left") == 0)
+            move_left();
+        else if(strcmp(msg, "stop") == 0)
+            stop();
+
+    }
+    else if(strcmp(topicName, "speed") == 0){
+
+        // seekBar ( 0, 1, 2 ... 10 )
+        int sp = atoi(msg);
+        controlSpeed(30 + sp * 7);
+    }
+
 
     // free the memory used to store the msg
     MQTTClient_freeMessage(&message);
