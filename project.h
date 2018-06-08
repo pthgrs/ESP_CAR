@@ -47,8 +47,8 @@ FILE *fp;
 
 /* direction */
 int initMotor();  
-void move_forward();
-void move_backward();
+void move_go();
+void move_back();
 void move_right();
 void move_left();
 void move_stop();

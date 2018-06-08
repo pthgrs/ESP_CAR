@@ -17,7 +17,7 @@ void read_dht_data()
     float   tempC;
     float   humidity;
     char    str[10];
-    int     tid;
+    pthread_t tid;
 
     call_count_ = 0;
     data_[0] = data_[1] = data_[2] = data_[3] = data_[4] = 0;
@@ -44,7 +44,7 @@ void read_dht_data()
 
         printf("Temperature: %.1fC Humidity: %.1f%%\n", tempC, humidity);
 
-        if(tempC > 30){
+        if(tempC > 20){
             sprintf(str, "%f", tempC);
             publish("TOANDROID/fire", str);
             pthread_create(&tid, NULL, alertLED, NULL);
@@ -64,8 +64,6 @@ void cb_func_dht22(int pi, unsigned user_gpio, unsigned level, uint32_t tick)
 
     start_tick_ = tick;
     call_count_++;
-
-//    printf("%2d duration : %3d ", call_count_, duration);
 
 
     if(call_count_ == 1) 

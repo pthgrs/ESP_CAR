@@ -1,7 +1,7 @@
 #include "project.h"
 
-#define ADDRESS     "192.168.219.115:1883"
-//#define ADDRESS     "192.168.0.9:1883"
+//#define ADDRESS     "192.168.219.115:1883"
+#define ADDRESS     "192.168.0.9:1883"
 #define CLIENTID    "esp"
 #define TOPIC       "TOPI/#"
 #define QOS         1
@@ -28,9 +28,10 @@ void createMQTTClient()
     // subscribe to the topic
     MQTTClient_subscribe(client, TOPIC, QOS);
 
-    // loop
-    while(1);
+}
 
+void destoryMQTT()
+{
     // disconnect the client from the daemon
     MQTTClient_disconnect(client, 10000);
 
