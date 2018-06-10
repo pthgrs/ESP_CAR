@@ -42,7 +42,7 @@ void read_dht_data()
         if (data_[2] & 0x80)
             tempC *= -1.0f;
 
-        printf("Temperature: %.1fC Humidity: %.1f%%\n", tempC, humidity);
+        // printf("Temperature: %.1fC Humidity: %.1f%%\n", tempC, humidity);
 
         if(tempC > 20){
             sprintf(str, "%f", tempC);
@@ -76,7 +76,6 @@ void cb_func_dht22(int pi, unsigned user_gpio, unsigned level, uint32_t tick)
 //        printf("%d", (duration > 100?1:0));
         data_bit_offset++;
     }
-//    printf("\n");
 }
 
 void *alertLED(void *p)

@@ -37,17 +37,18 @@ void *hcsr04_run(void *p)
 
             distance = dist_tick_ / 1000000. * 340 / 2 * 100;
 
-            if(distance > 400)
-                printf("range error\n");
+            if(distance > 400);
+                //printf("range error\n");
 
-            if(distance < 8 && strcmp(direction, "back"))
+            if(distance < 8 && strcmp(direction, "back")){
+                //printf("distance : %6.1fcm\ttoo close\n", distance);
                 move_stop();
+            }
             else 
                 ;
-//                printf("Distance : %6.1f cm\n", distance);
         }
-        else
-            printf("sense error\n");
+        else;
+           // printf("sense error\n");
 
         time_sleep(0.1);
     }

@@ -80,4 +80,7 @@ void controlSpeed(int sp)
 {
     set_PWM_dutycycle(pi, EN1, sp);
     set_PWM_dutycycle(pi, EN2, sp);
+
+    int duty = get_PWM_dutycycle(pi, EN1);
+    printf("in controlSpeed %d\n", duty);
 }
