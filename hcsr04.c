@@ -1,6 +1,6 @@
 #include "project.h"
 
-uint32_t start_tick_, dist_tick_;
+uint32_t h_start_tick_, dist_tick_;
 
 void initHcsr04()
 {
@@ -18,9 +18,9 @@ void initHcsr04()
 void cb_func_echo(int pi, unsigned gpio, unsigned level, uint32_t tick)
 {
     if(level == PI_HIGH)
-        start_tick_ = tick;
+        h_start_tick_ = tick;
     else if(level == PI_LOW)
-        dist_tick_ = tick - start_tick_;
+        dist_tick_ = tick - h_start_tick_;
 }
 
 void *hcsr04_run(void *p)
@@ -29,11 +29,11 @@ void *hcsr04_run(void *p)
 
     while(1){
 
-        start_tick_ = dist_tick_ = 0;
+        h_start_tick_ = dist_tick_ = 0;
         gpio_trigger(pi, TRIG_PINNO, 10, PI_HIGH);
         time_sleep(0.05);
 
-        if(dist_tick_ && start_tick_){
+        if(dist_tick_ && h_start_tick_){
 
             distance = dist_tick_ / 1000000. * 340 / 2 * 100;
 

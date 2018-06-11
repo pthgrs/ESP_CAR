@@ -1,6 +1,3 @@
-#ifndef __HEADER__
-#define __HEADER__
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,19 +34,22 @@
 
 #define LEN     50
 
+#ifndef __HEADER__
+#define __HEADER__
+
 /* setting */
-int pi;
-MQTTClient subClient;
-MQTTClient pubClient;
+extern int pi;
+extern MQTTClient subClient;
+extern MQTTClient pubClient;
 
 /* racing data */
-int moveMode;
-char direction[LEN];
-int speed;
-time_t start_time, end_time;
-FILE *fp;
+extern int moveMode;
+extern char direction[LEN];
+extern int speed;
+extern time_t start_time, end_time;
+extern FILE *fp;
 
-#endif
+#endif 
 
 /* direction */
 int initMotor();  

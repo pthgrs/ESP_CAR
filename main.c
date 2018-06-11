@@ -1,5 +1,15 @@
 #include "project.h"
 
+int pi;
+MQTTClient subClient;
+MQTTClient pubClient;
+
+int moveMode;
+char direction[LEN];
+int speed;
+time_t start_time, end_time;
+FILE *fp;
+
 int main()
 {
     pthread_t tid1, tid2;
