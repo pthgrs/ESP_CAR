@@ -49,6 +49,7 @@ void backProjection(const Mat &frame, const Mat &histogram, Mat &bp) {
 int main()
 {
 	raspicam::RaspiCam_Cv cap;
+	// VideoCapture cap(0);
 
 	//웹캡에서 캡처되는 이미지 크기를 320x240으로 지정  
 	cap.set(CV_CAP_PROP_FORMAT, CV_8UC3);
@@ -81,9 +82,10 @@ int main()
 
 		int fps = cap.get(CV_CAP_PROP_FPS);
 
-		//카메라로부터 이미지를 가져옴 
+		// 카메라로부터 이미지를 가져옴 
 		cap.grab();
 		cap.retrieve(img_input);
+		// cap.read(img_input);
 
 		//HSV로 변환
 		cvtColor(img_input, img_hsv, COLOR_BGR2HSV);

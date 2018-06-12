@@ -1,12 +1,19 @@
 #include "project.h"
 
+#define ALERT_TEMP 20
+
 int call_count_ = 0;
 uint32_t start_tick_;
 uint8_t data_[5];
 
+float   tempC;
+
 void *dht22_run(void *p)
 {
-    while(1){
+    pthread_t tid;
+    pthread_create(&tid, NULL, alertLED, NULL);
+    
+	while(1){
         read_dht_data();
         time_sleep(1);
     }
@@ -14,10 +21,8 @@ void *dht22_run(void *p)
 
 void read_dht_data()
 {
-    float   tempC;
     float   humidity;
     char    str[10];
-    pthread_t tid;
 
     call_count_ = 0;
     data_[0] = data_[1] = data_[2] = data_[3] = data_[4] = 0;
@@ -34,25 +39,34 @@ void read_dht_data()
 
     set_pull_up_down(pi, SDAPIN, PI_PUD_UP);        
     set_mode(pi, SDAPIN, PI_INPUT);                 
-    usleep(10000);                                  
+    usleep(10000);
 
+	tempC = 100;
+    if(tempC > ALERT_TEMP){
+        sprintf(str, "%f", tempC);
+		char topic[20] = "TOANDROID/fire";
+        publish(topic, str);
+		sleep(5);
+    }
+/*
     if (call_count_ >= 43 && data_[4] == ((data_[0] + data_[1] + data_[2] + data_[3]) & 0xff)) {
         humidity = (data_[0] * 256 + data_[1]) / 10.0f;
         tempC = ((data_[2] & 0x7f) * 256 + data_[3]) / 10.0f;
         if (data_[2] & 0x80)
             tempC *= -1.0f;
 
-        // printf("Temperature: %.1fC Humidity: %.1f%%\n", tempC, humidity);
+         printf("Temperature: %.1fC Humidity: %.1f%%\n", tempC, humidity);
 
-        if(tempC > 20){
+        if(tempC > ALERT_TEMP){
             sprintf(str, "%f", tempC);
-            publish("TOANDROID/fire", str);
-            pthread_create(&tid, NULL, alertLED, NULL);
+			char topic[20] = "TOANDROID/fire";
+            publish(topic, str);
+			sleep(10);
         }
 
     } else 
         printf("Data Invalid!\n");
-
+*/
 }
 /* tick : 언제 발생했는지 */
 void cb_func_dht22(int pi, unsigned user_gpio, unsigned level, uint32_t tick)
@@ -80,12 +94,16 @@ void cb_func_dht22(int pi, unsigned user_gpio, unsigned level, uint32_t tick)
 
 void *alertLED(void *p)
 {
-    set_mode(pi, LED, PI_OUTPUT);
+    while(1){
+		if(tempC > ALERT_TEMP){
+			set_mode(pi, LED, PI_OUTPUT);
 
-    for(int i = 0; i < 5; i++){
-        gpio_write(pi, LED, 1);
-        time_sleep(1);
-        gpio_write(pi, LED, 0);
-        time_sleep(1);
-    }
+			for(int i = 0; i < 5; i++){
+			gpio_write(pi, LED, 1);
+			time_sleep(1);
+			gpio_write(pi, LED, 0);
+			time_sleep(1);
+			}
+		}
+	}
 }
