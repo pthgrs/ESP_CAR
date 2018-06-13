@@ -16,7 +16,7 @@ int initMotor()
     // PWM
     set_PWM_range(pi, EN1, default_range);
     set_PWM_range(pi, EN2, default_range);
-    
+
     set_PWM_dutycycle(pi, EN1, 0);
     set_PWM_dutycycle(pi, EN2, 0);
 }

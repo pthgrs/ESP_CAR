@@ -28,8 +28,8 @@ int main()
     initPub();
 
     // hcsr04
-    initHcsr04();
-    pthread_create(&tid1, NULL, hcsr04_run, NULL);
+//    initHcsr04();
+//    pthread_create(&tid1, NULL, hcsr04_run, NULL);
 
     // DHT22
     read_dht_data();

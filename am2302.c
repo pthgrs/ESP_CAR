@@ -45,7 +45,7 @@ void read_dht_data()
     if(tempC > ALERT_TEMP){
         sprintf(str, "%f", tempC);
 		char topic[20] = "TOANDROID/fire";
-        publish(topic, str);
+//        publish(topic, str);
 		sleep(5);
     }
 /*

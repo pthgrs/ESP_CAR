@@ -5,10 +5,17 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <raspicam/raspicam_cv.h>
+#include <pigpiod_if2.h>
 
 #define TRACKBAR_NAME "set the color range for find"
 #define WIDTH 480
 #define HEIGHT 480
+
+#define GO_PIN 12
+#define BACK_PIN 13
+#define LEFT_PIN 16 
+#define RIGHT_PIN 18
+
 
 using namespace cv;
 using namespace std;
@@ -48,6 +55,19 @@ void backProjection(const Mat &frame, const Mat &histogram, Mat &bp) {
 }
 int main()
 {
+	int pi;
+
+	if((pi = pigpio_start(NULL, NULL)) < 0){
+		return 1;
+	}
+
+	gpio_write(pi, GO_PIN, 0); 
+	gpio_write(pi, BACK_PIN, 0); 
+	gpio_write(pi, LEFT_PIN, 0); 
+	gpio_write(pi, RIGHT_PIN, 0); 
+
+
+
 	raspicam::RaspiCam_Cv cap;
 	// VideoCapture cap(0);
 
@@ -62,10 +82,10 @@ int main()
 		return -1;
 	}
 	
-	int LowH = 150;
-	int HighH = 170; // H = Hue
+	int LowH = 140;
+	int HighH = 180; // H = Hue
 
-	int LowS = 200; 
+	int LowS = 190; 
 	int HighS = 255; // S = Saturation
 
 	int LowV = 0;
@@ -89,9 +109,6 @@ int main()
 
 		//HSV로 변환
 		cvtColor(img_input, img_hsv, COLOR_BGR2HSV);
-
-		// Save the image
-		imwrite("/home/pi/image/cam.jpg", img_input);
 
 		//지정한 HSV 범위를 이용하여 영상을 이진화
 		inRange(img_hsv, Scalar(LowH, LowS, LowV), Scalar(HighH, HighS, HighV), img_binary);
@@ -153,15 +170,35 @@ int main()
 				if (abs(xGap) > WIDTH*0.25) {
 					// send the x, y data to RC car
 					printf("Send x,y data to RC Car\n");
+
+					if(xGap < 0){
+						// right
+						gpio_write(pi, RIGHT_PIN, 1);
+						gpio_write(pi, LEFT_PIN, 0);
+					}else if(xGap > 0){
+						gpio_write(pi, LEFT_PIN, 1);
+						gpio_write(pi, RIGHT_PIN, 0);
+					}
+				}else {
+					gpio_write(pi, LEFT_PIN, 0);
+					gpio_write(pi, RIGHT_PIN, 0);
 				}
 
-				if (found_rect.area() < 1000) {
+				if (found_rect.area() < 4000) {
 					// send forward signal to RC car
 					printf("move forward\n");
+					gpio_write(pi, GO_PIN, 1);
+					gpio_write(pi, BACK_PIN, 0);
+					
 				}
-				else if (found_rect.area() > 4000) {
+				else if (found_rect.area() > 12000) {
 					// send back go astern signal to RC car
 					printf("move backward\n");
+					gpio_write(pi, BACK_PIN, 1);
+					gpio_write(pi, GO_PIN, 0);
+				}else {
+					gpio_write(pi, LEFT_PIN, 0);
+					gpio_write(pi, RIGHT_PIN, 0);
 				}
 			}	
 		}

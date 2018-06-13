@@ -21,6 +21,8 @@ opencv2/opencv.hpp
 -
 raspicam/raspicam_cv.h
 -
+pigpiod_if2.h
+-
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h
