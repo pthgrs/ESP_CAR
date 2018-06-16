@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pigpiod_if2.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -34,6 +35,9 @@
 
 #define LEN     50
 
+// Servo
+#define SERVO_GPIO 25
+
 #ifndef __HEADER__
 #define __HEADER__
 
@@ -41,9 +45,11 @@
 extern int pi;
 extern MQTTClient subClient;
 extern MQTTClient pubClient;
+extern struct timeval bgn, end;
 
 /* racing data */
 extern int moveMode;
+extern int autoStop;
 extern char direction[LEN];
 extern int speed;
 extern time_t start_time, end_time;
@@ -89,5 +95,10 @@ void directionController(char *msg);
 void start_record();
 void end_record();
 void recording();
-void run_recording();
-float getTimeDiff();
+void *run_recording(void *p);
+//float getTimeDiff();
+double getTimeDiff();
+
+/* servo */
+void moveServo(int degree);
+

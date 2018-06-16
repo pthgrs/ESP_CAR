@@ -58,6 +58,7 @@ int main()
 	int pi;
 
 	if((pi = pigpio_start(NULL, NULL)) < 0){
+		printf("Here???\n");
 		return 1;
 	}
 
@@ -66,12 +67,8 @@ int main()
 	gpio_write(pi, LEFT_PIN, 0); 
 	gpio_write(pi, RIGHT_PIN, 0); 
 
-
-
 	raspicam::RaspiCam_Cv cap;
-	// VideoCapture cap(0);
 
-	//웹캡에서 캡처되는 이미지 크기를 320x240으로 지정  
 	cap.set(CV_CAP_PROP_FORMAT, CV_8UC3);
 	cap.set(CV_CAP_PROP_FRAME_WIDTH,WIDTH);  
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT,HEIGHT);
@@ -102,34 +99,25 @@ int main()
 
 		int fps = cap.get(CV_CAP_PROP_FPS);
 
-		// 카메라로부터 이미지를 가져옴 
 		cap.grab();
 		cap.retrieve(img_input);
-		// cap.read(img_input);
-
-		//HSV로 변환
 		cvtColor(img_input, img_hsv, COLOR_BGR2HSV);
 
-		//지정한 HSV 범위를 이용하여 영상을 이진화
 		inRange(img_hsv, Scalar(LowH, LowS, LowV), Scalar(HighH, HighS, HighV), img_binary);
 
-		//morphological opening 작은 점들을 제거
 		erode(img_binary, img_binary, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 		dilate( img_binary, img_binary, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 
-		//morphological closing 영역의 구멍 메우기 
 		dilate( img_binary, img_binary, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) ); 
 		erode(img_binary, img_binary, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)) );
 
 		if ( i < 100 )
 		{
 
-			//라벨링 
 			Mat img_labels,stats, centroids;  
 			int numOfLables = connectedComponentsWithStats(img_binary, img_labels,   
 					stats, centroids, 8, CV_32S);  
 
-			//영역박스 그리기
 			int max = -1, idx=0;
 			for (int j = 1; j < numOfLables; j++) {
 				int area = stats.at<int>(j, CC_STAT_AREA);
@@ -173,32 +161,32 @@ int main()
 
 					if(xGap < 0){
 						// right
-						gpio_write(pi, RIGHT_PIN, 1);
-						gpio_write(pi, LEFT_PIN, 0);
+						// gpio_write(pi, RIGHT_PIN, 1);
+						// gpio_write(pi, LEFT_PIN, 0);
 					}else if(xGap > 0){
-						gpio_write(pi, LEFT_PIN, 1);
-						gpio_write(pi, RIGHT_PIN, 0);
+						// gpio_write(pi, LEFT_PIN, 1);
+						// gpio_write(pi, RIGHT_PIN, 0);
 					}
 				}else {
-					gpio_write(pi, LEFT_PIN, 0);
-					gpio_write(pi, RIGHT_PIN, 0);
+					// gpio_write(pi, LEFT_PIN, 0);
+					// gpio_write(pi, RIGHT_PIN, 0);
 				}
 
 				if (found_rect.area() < 4000) {
 					// send forward signal to RC car
 					printf("move forward\n");
-					gpio_write(pi, GO_PIN, 1);
-					gpio_write(pi, BACK_PIN, 0);
+					// gpio_write(pi, GO_PIN, 1);
+					// gpio_write(pi, BACK_PIN, 0);
 					
 				}
 				else if (found_rect.area() > 12000) {
 					// send back go astern signal to RC car
 					printf("move backward\n");
-					gpio_write(pi, BACK_PIN, 1);
-					gpio_write(pi, GO_PIN, 0);
+					// gpio_write(pi, BACK_PIN, 1);
+					// gpio_write(pi, GO_PIN, 0);
 				}else {
-					gpio_write(pi, LEFT_PIN, 0);
-					gpio_write(pi, RIGHT_PIN, 0);
+					// gpio_write(pi, LEFT_PIN, 0);
+					// gpio_write(pi, RIGHT_PIN, 0);
 				}
 			}	
 		}

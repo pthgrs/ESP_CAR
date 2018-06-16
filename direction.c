@@ -3,6 +3,7 @@
 int initMotor()
 {
     int default_range = 100;
+	speed = 0;
 
     // setmode
     set_mode(pi, MA1, PI_OUTPUT); 
@@ -25,62 +26,50 @@ void move_go()
 {
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
-    gpio_write(pi, EN1, PI_HIGH);
 
     gpio_write(pi, MA2, PI_HIGH);
     gpio_write(pi, MB2, PI_LOW);
-    gpio_write(pi, EN2, PI_HIGH);
 }
 
 void move_back()
 {
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_HIGH);
-    gpio_write(pi, EN1, PI_HIGH);
 
     gpio_write(pi, MA2, PI_LOW);
     gpio_write(pi, MB2, PI_HIGH);
-    gpio_write(pi, EN2, PI_HIGH);
 }
 
 void move_right()
 {
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_LOW);
-    gpio_write(pi, EN1, PI_HIGH);
 
     gpio_write(pi, MA2, PI_HIGH);
     gpio_write(pi, MB2, PI_LOW);
-    gpio_write(pi, EN2, PI_HIGH);
 }
 
 void move_left()
 {
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
-    gpio_write(pi, EN1, PI_HIGH);
 
     gpio_write(pi, MA2, PI_LOW);
     gpio_write(pi, MB2, PI_LOW);
-    gpio_write(pi, EN2, PI_HIGH);
 }
 
 void move_stop()
 {
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_LOW);
-    gpio_write(pi, EN1, PI_LOW);
 
     gpio_write(pi, MA2, PI_LOW);
     gpio_write(pi, MB2, PI_LOW);
-    gpio_write(pi, EN2, PI_LOW);
 }
 
 void controlSpeed(int sp)
 {
+	printf("in controlSpeed %d\n", sp);
     set_PWM_dutycycle(pi, EN1, sp);
     set_PWM_dutycycle(pi, EN2, sp);
-
-    int duty = get_PWM_dutycycle(pi, EN1);
-    printf("in controlSpeed %d\n", duty);
 }

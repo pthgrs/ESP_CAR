@@ -2,14 +2,16 @@
 
 void msgController(char *topicName, char *msg)
 {
-    if(moveMode ==  MODE_AUTOREC){
-        recording();
-    }
+	pthread_t tid;
+
+//    if(moveMode ==  MODE_AUTOREC)
+//        recording();
 
     // about MODE_AUTOREC
     if(strcmp(topicName, "moveMode") == 0){
         
         int mode = atoi(msg);
+
         
         if(mode == MODE_AUTOREC)
             start_record();
@@ -17,8 +19,10 @@ void msgController(char *topicName, char *msg)
         else if(moveMode == MODE_AUTOREC && mode != MODE_AUTOREC)
             end_record();
 
-        else if(mode == MODE_AUTO)
-            run_recording();
+		else if(mode == MODE_AUTO){
+			autoStop = 0;
+            pthread_create(&tid, NULL, run_recording, NULL);
+		}
 
         moveMode = mode;
     }
@@ -27,7 +31,15 @@ void msgController(char *topicName, char *msg)
         directionController(msg);
 
     else if(strcmp(topicName, "speed") == 0)
-        speedController(msg);
+       speedController(msg);
+	else if(strcmp(topicName, "degree") == 0){
+		int degree = atoi(msg);
+		moveServo(degree);
+	}
+
+    if(moveMode ==  MODE_AUTOREC)
+        recording();
+
 }
 
 void directionController(char *msg)
@@ -49,7 +61,7 @@ void directionController(char *msg)
 void speedController(char *msg)
 {
     // seekBar( 0, 1, 2 ...10)
-    speed = atoi(msg);
-    controlSpeed(30 + speed * 7);
+    speed = 60 + atoi(msg) * 8;
+	controlSpeed(speed);
 }
 

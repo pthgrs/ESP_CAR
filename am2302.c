@@ -40,15 +40,15 @@ void read_dht_data()
     set_pull_up_down(pi, SDAPIN, PI_PUD_UP);        
     set_mode(pi, SDAPIN, PI_INPUT);                 
     usleep(10000);
-
+/*
 	tempC = 100;
     if(tempC > ALERT_TEMP){
         sprintf(str, "%f", tempC);
 		char topic[20] = "TOANDROID/fire";
-//        publish(topic, str);
+        publish(topic, str);
 		sleep(5);
     }
-/*
+*/
     if (call_count_ >= 43 && data_[4] == ((data_[0] + data_[1] + data_[2] + data_[3]) & 0xff)) {
         humidity = (data_[0] * 256 + data_[1]) / 10.0f;
         tempC = ((data_[2] & 0x7f) * 256 + data_[3]) / 10.0f;
@@ -66,7 +66,7 @@ void read_dht_data()
 
     } else 
         printf("Data Invalid!\n");
-*/
+
 }
 /* tick : 언제 발생했는지 */
 void cb_func_dht22(int pi, unsigned user_gpio, unsigned level, uint32_t tick)
