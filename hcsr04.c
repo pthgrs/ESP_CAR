@@ -40,8 +40,8 @@ void *hcsr04_run(void *p)
             if(distance > 400);
                 //printf("range error\n");
 
-            if(distance < 8 && strcmp(direction, "back")){
-                //printf("distance : %6.1fcm\ttoo close\n", distance);
+            if(distance < 8 && strcmp(direction, "back") == 0){
+                printf("distance : %6.1fcm\ttoo close\n", distance);
                 move_stop();
             }
             else 

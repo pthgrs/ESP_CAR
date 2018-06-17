@@ -1,8 +1,8 @@
 #include "project.h"
 
-//#define ADDRESS     "192.168.0.18"
+#define ADDRESS     "192.168.0.2"
 //#define ADDRESS     "192.168.43.12"
-#define ADDRESS		"192.168.0.2"
+//#define ADDRESS		"192.168.0.2"
 //#define ADDRESS     "192.168.219.115:1883"
 //#define ADDRESS     "192.168.0.9:1883
 #define SUBID       "PI_SUB"
@@ -101,7 +101,7 @@ void publish(char *topic, char *msg)
     MQTTClient_message pubmsg = MQTTClient_message_initializer;
     MQTTClient_deliveryToken token;
 
-    printf("in publish %s, %s\n", topic, msg);
+//    printf("in publish %s, %s\n", topic, msg);
 
     pubmsg.payload = msg;
     pubmsg.payloadlen = strlen(msg);

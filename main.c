@@ -13,15 +13,16 @@ struct timeval bgn, end;
 FILE *fp;
 
 void* colorMove(void* arg){
-	int go=0,back=0,left=0,right=0;
 	while(1){
-		if(moveMode = MODE_FACE){
+		int go=0,back=0,left=0,right=0;
+
+		if(moveMode == MODE_FACE){
 			go = gpio_read(pi,12);
 			back = gpio_read(pi,13);
 			left = gpio_read(pi,16);
 			right = gpio_read(pi,18);
 
-//			printf("%d %d %d %d\n", go, back, left, right);
+			printf("%d %d %d %d\n", go, back, left, right);
 			
 			if(go == 0 && back == 0 && left == 0 && right == 0)
 				move_stop();
@@ -42,6 +43,17 @@ int main()
     pthread_t tid1, tid2;
     pthread_t tid3,tid4;
 
+
+	gpio_write(pi, 5, PI_LOW);
+	gpio_write(pi, 6, PI_LOW);
+	gpio_write(pi, 23, PI_LOW);
+	gpio_write(pi, 27, PI_LOW);
+	gpio_write(pi, 17, PI_LOW);
+	gpio_write(pi, 24, PI_LOW);
+
+	set_mode(pi, LED, PI_OUTPUT);
+	gpio_write(pi, LED, 0);
+
     if((pi = pigpio_start(NULL, NULL)) < 0){
         fprintf(stderr, "%s\n", pigpio_error(pi));
         return 1;
@@ -58,12 +70,12 @@ int main()
     initPub();
 
     // hcsr04
-//    initHcsr04();
-//    pthread_create(&tid1, NULL, hcsr04_run, NULL);
+    initHcsr04();
+    pthread_create(&tid1, NULL, hcsr04_run, NULL);
 
     // DHT22
-//    read_dht_data();
-//    pthread_create(&tid2, NULL, dht22_run, NULL); 
+    read_dht_data();
+    pthread_create(&tid2, NULL, dht22_run, NULL); 
 
 	pthread_create(&tid4, NULL, colorMove,NULL);
     

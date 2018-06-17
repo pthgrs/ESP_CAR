@@ -155,7 +155,7 @@ int main()
 
 				printf("xGap=%d yGap=%d area=%d\n", abs(xGap), abs(yGap), found_rect.area());
 
-				if (abs(xGap) > WIDTH*0.25) {
+				if (abs(xGap) > WIDTH*0.125) {
 					// send the x, y data to RC car
 					printf("Send x,y data to RC Car\n");
 
@@ -185,10 +185,17 @@ int main()
 					gpio_write(pi, BACK_PIN, 1);
 					gpio_write(pi, GO_PIN, 0);
 				}else {
-					gpio_write(pi, LEFT_PIN, 0);
-					gpio_write(pi, RIGHT_PIN, 0);
+					gpio_write(pi, GO_PIN, 0);
+					gpio_write(pi, BACK_PIN, 0);
 				}
 			}	
+			else {
+				printf("No Image\n");
+				gpio_write(pi, GO_PIN, 0);
+				gpio_write(pi, BACK_PIN, 0);
+				gpio_write(pi, LEFT_PIN, 0);
+				gpio_write(pi, RIGHT_PIN, 0);
+			}
 		}
 
 		imshow("Binary Video", img_binary);

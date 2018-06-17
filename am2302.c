@@ -1,6 +1,6 @@
 #include "project.h"
 
-#define ALERT_TEMP 20
+#define ALERT_TEMP 45
 
 int call_count_ = 0;
 uint32_t start_tick_;
@@ -106,4 +106,6 @@ void *alertLED(void *p)
 			}
 		}
 	}
+
+	gpio_write(pi, LED, 0);
 }

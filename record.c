@@ -36,20 +36,21 @@ void *run_recording(void *p)
 
 	    while(fscanf(fp, "%s\t%d\t%lf\n", dir, &sp, &diff) > 0){
 	
+//			printf("%s\t%d\t%lf\n", dir, sp, diff);
 			if(moveMode != MODE_AUTO){
-				move_stop();
+				printf("in run record! is not MODE_AUTO\n");
+//				move_stop();
+				gpio_write(pi, MA1, PI_LOW);
+				gpio_write(pi, MA2, PI_LOW);
+				gpio_write(pi, MB1, PI_LOW);
+				gpio_write(pi, MB2, PI_LOW);
+
 				return NULL;
 			}
 
-			printf("%s\t%d\t%f\n", dir, sp, diff);
-	//		controlSpeed(sp);
-	//		directionController(dir);
+			controlSpeed(sp);
 			directionController(dir);
-	//		controlSpeed(sp);
-			set_PWM_dutycycle(pi, EN1, sp);
-			set_PWM_dutycycle(pi, EN2, sp);
-//			usleep(diff);
-			sleep(diff);
+			usleep(diff - 200);
 	   }
 	}
 }
@@ -75,7 +76,8 @@ double getTimeDiff()
 	double diff;
 
 	gettimeofday(&end, NULL);
-	diff = (double)end.tv_sec + (double)end.tv_usec / 1000000.0 - (double)bgn.tv_sec - (double)bgn.tv_usec / 1000000.0;
+	diff = 1000000 *(double)(end.tv_sec - bgn.tv_sec)
+		+(double)(end.tv_usec - bgn.tv_usec);
 
 	gettimeofday(&bgn, NULL);
 	return diff;

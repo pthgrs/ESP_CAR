@@ -24,6 +24,7 @@ int initMotor()
 
 void move_go()
 {
+	printf("move_go!!\n");
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
 
@@ -33,6 +34,7 @@ void move_go()
 
 void move_back()
 {
+	printf("move_back!!\n");
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_HIGH);
 
@@ -42,6 +44,7 @@ void move_back()
 
 void move_right()
 {
+	printf("move_right!!\n");
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_LOW);
 
@@ -51,6 +54,7 @@ void move_right()
 
 void move_left()
 {
+	printf("move_left\n");
     gpio_write(pi, MA1, PI_HIGH);
     gpio_write(pi, MB1, PI_LOW);
 
@@ -60,6 +64,7 @@ void move_left()
 
 void move_stop()
 {
+//	printf("in move_stop\n");
     gpio_write(pi, MA1, PI_LOW);
     gpio_write(pi, MB1, PI_LOW);
 
@@ -69,7 +74,6 @@ void move_stop()
 
 void controlSpeed(int sp)
 {
-	printf("in controlSpeed %d\n", sp);
     set_PWM_dutycycle(pi, EN1, sp);
     set_PWM_dutycycle(pi, EN2, sp);
 }
