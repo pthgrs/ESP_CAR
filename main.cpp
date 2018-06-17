@@ -161,32 +161,32 @@ int main()
 
 					if(xGap < 0){
 						// right
-						// gpio_write(pi, RIGHT_PIN, 1);
-						// gpio_write(pi, LEFT_PIN, 0);
+						gpio_write(pi, RIGHT_PIN, 1);
+						gpio_write(pi, LEFT_PIN, 0);
 					}else if(xGap > 0){
-						// gpio_write(pi, LEFT_PIN, 1);
-						// gpio_write(pi, RIGHT_PIN, 0);
+						gpio_write(pi, LEFT_PIN, 1);
+						gpio_write(pi, RIGHT_PIN, 0);
 					}
 				}else {
-					// gpio_write(pi, LEFT_PIN, 0);
-					// gpio_write(pi, RIGHT_PIN, 0);
+					gpio_write(pi, LEFT_PIN, 0);
+					gpio_write(pi, RIGHT_PIN, 0);
 				}
 
 				if (found_rect.area() < 4000) {
 					// send forward signal to RC car
 					printf("move forward\n");
-					// gpio_write(pi, GO_PIN, 1);
-					// gpio_write(pi, BACK_PIN, 0);
+					gpio_write(pi, GO_PIN, 1);
+					gpio_write(pi, BACK_PIN, 0);
 					
 				}
 				else if (found_rect.area() > 12000) {
 					// send back go astern signal to RC car
 					printf("move backward\n");
-					// gpio_write(pi, BACK_PIN, 1);
-					// gpio_write(pi, GO_PIN, 0);
+					gpio_write(pi, BACK_PIN, 1);
+					gpio_write(pi, GO_PIN, 0);
 				}else {
-					// gpio_write(pi, LEFT_PIN, 0);
-					// gpio_write(pi, RIGHT_PIN, 0);
+					gpio_write(pi, LEFT_PIN, 0);
+					gpio_write(pi, RIGHT_PIN, 0);
 				}
 			}	
 		}

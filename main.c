@@ -21,7 +21,6 @@ void* colorMove(void* arg){
 			left = gpio_read(pi,16);
 			right = gpio_read(pi,18);
 
-
 //			printf("%d %d %d %d\n", go, back, left, right);
 			
 			if(go == 0 && back == 0 && left == 0 && right == 0)
@@ -66,7 +65,7 @@ int main()
 //    read_dht_data();
 //    pthread_create(&tid2, NULL, dht22_run, NULL); 
 
-//	pthread_create(&tid4, NULL, colorMove,NULL);
+	pthread_create(&tid4, NULL, colorMove,NULL);
     
     while(1);
     // pigpio_stop(pi);
